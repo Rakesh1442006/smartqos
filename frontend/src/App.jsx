@@ -24,11 +24,11 @@ function App() {
   const getData = async () => {
     try {
       const networkResponse = await axios.get(
-        "http://127.0.0.1:5000/api/network"
+        "https://smartqos.onrender.com/api/network"
       );
 
       const qosResponse = await axios.get(
-        "http://127.0.0.1:5000/api/qos"
+        "https://smartqos.onrender.com/api/qos"
       );
 
      setNetwork(networkResponse.data);
@@ -59,7 +59,7 @@ setTrafficHistory((prev) => {
   const changeSimulation = async (mode) => {
   try {
     await axios.post(
-      `http://127.0.0.1:5000/api/simulation/${mode}`
+      `https://smartqos.onrender.com/api/simulation/${mode}`
     );
 
     await getData();
