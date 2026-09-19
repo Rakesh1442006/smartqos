@@ -53,22 +53,20 @@ def get_network_speed():
 def get_latency():
     try:
 
-        if platform.system().lower() == "windows":
+        result = subprocess.run(
+            ["ping", "-c", "1", "8.8.8.8"],
+            capture_output=True,
+            text=True,
+            timeout=3
+        )
 
-            result = subprocess.run(
-                ["ping", "-n", "1", "8.8.8.8"],
-                capture_output=True,
-                text=True,
-                timeout=3
-            )
+        match = re.search(
+            r"time[=<]\s*(\d+(?:\.\d+)?)\s*ms",
+            result.stdout
+        )
 
-            match = re.search(
-                r"time[=<]\s*(\d+)\s*ms",
-                result.stdout
-            )
-
-            if match:
-                return int(match.group(1))
+        if match:
+            return round(float(match.group(1)), 2)
 
         return None
 
@@ -286,8 +284,12 @@ def qos_status():
 
 if __name__ == "__main__":
 
+    import os
+
+    port = int(os.environ.get("PORT", 5000))
+
     app.run(
-        host="127.0.0.1",
-        port=5000,
-        debug=True
+        host="0.0.0.0",
+        port=port,
+        debug=False
     )
